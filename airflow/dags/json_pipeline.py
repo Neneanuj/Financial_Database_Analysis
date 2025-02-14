@@ -63,7 +63,7 @@ transform_task = PythonOperator(
 
 # 3. Load JSON into Snowflake
 def load_to_snowflake(**context):
-    os.system("python storage/snowflake_loader.py")
+    os.system("python storage/snowflake_loader_json.py")
     print("✅ JSON loaded into Snowflake")
 
 load_task = PythonOperator(
@@ -96,16 +96,17 @@ create_table = SnowflakeOperator(
 # 5. Run DBT transformations
 run_dbt = BashOperator(
     task_id='run_dbt_models',
-    bash_command='cd dbt_transform && dbt run --profiles-dir . --target dev',
+    bash_command='cd dbt/data_pipeline && dbt run --profiles-dir . --target dev',
     dag=dag
 )
 
 # 6. Run DBT tests
 test_dbt = BashOperator(
     task_id='test_dbt_models',
-    bash_command='cd dbt_transform && dbt test --profiles-dir . --target dev',
+    bash_command='cd dbt/data_pipeline && dbt test --profiles-dir . --target dev',
     dag=dag
 )
+
 
 # Task dependencies
 unzip_task >> transform_task >> create_table >> load_task >> run_dbt >> test_dbt

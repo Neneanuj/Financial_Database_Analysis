@@ -1,0 +1,11 @@
+version: 2
+models:
+  - name: fct_test
+    columns:
+      - name: adsh
+        tests:
+          - unique
+          - not_null
+      - name: tag
+        tests:
+          - not_null

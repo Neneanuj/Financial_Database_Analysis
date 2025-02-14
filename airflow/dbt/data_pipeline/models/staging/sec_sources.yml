@@ -1,0 +1,19 @@
+version: 2
+sources:
+  - name: json_data
+    database: DBT_DB
+    schema: DBT_SCHEMA
+    tables:
+      - name: json_sec_data
+        columns:
+          - name: adsh
+            tests:
+              - unique
+              - not_null
+      - name: numbers
+        columns:
+          - name: adsh
+            tests:
+              - relationships:
+                  to: source('json_data', 'json_sec_data')
+                  field: adsh

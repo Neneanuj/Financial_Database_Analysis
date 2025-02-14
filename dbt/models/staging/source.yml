@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: sec
+    database: DBT_DB
+    schema: DBT_SCHEMA
+    tables:
+      - name: balance_sheet
+      - name: income_statement
+      - name: cash_flow

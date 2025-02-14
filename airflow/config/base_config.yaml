@@ -1,0 +1,13 @@
+s3:
+  bucket: bigdata-project2-storage
+  base_path: Raw_Data
+  file_types:
+    - sub
+    - tag
+    - num
+    - pre
+
+snowflake:
+  database: SEC_FINANCIALS
+  schema: PUBLIC
+  warehouse: COMPUTE_WH

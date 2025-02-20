@@ -11,7 +11,7 @@ import csv
 
 
 # Import SECDataUploader from scraper.py (ensure scraper.py is in the same directory or package)
-from sec_scraper import SECDataUploader
+from data_ingestion.sec_scraper_fact import SECDataUploader
 
 # Load environment variables (e.g., S3_BUCKET_NAME and AWS credentials)
 load_dotenv()

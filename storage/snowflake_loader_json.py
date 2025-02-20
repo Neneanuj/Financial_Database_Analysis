@@ -35,14 +35,17 @@ print("✅ Connection successful!")
 cur = conn.cursor()
 
 # Load JSON data
-DATA_DIR = "../../2021q4/"
+DATA_DIR = "../../../2021q4/"
 json_file_path = os.path.join(DATA_DIR, "sec_financial_data_clean.json")
 
 with open(json_file_path, "r") as f:
     json_data = json.load(f)
+# Get only 1/10 of the data
+subset_size = len(json_data) // 10
+subset_data = dict(list(json_data.items())[:subset_size])
 
 # Insert JSON into Snowflake
-for cik, record in json_data.items():
+for cik, record in subset_data.items():
     company_name = record.get("company_name", None)
 
     for filing in record.get("filings", []):
@@ -56,10 +59,21 @@ for cik, record in json_data.items():
 
         query = """
         INSERT INTO json_sec_data (cik, company_name, filing_date, fiscal_year, adsh, tag, value, unit, data)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, PARSE_JSON(%s))
+        SELECT cik, company_name, filing_date, fiscal_year, adsh, tag, value, unit, data
+        FROM json_sec_data
+        LIMIT (SELECT COUNT(*) / 10 FROM json_sec_data);
+
         """
+        
         cur.execute(query, (cik, company_name, filing_date, fiscal_year, adsh, tag, value, unit, data))
 
+
+        #query = """
+        #INSERT INTO json_sec_data (cik, company_name, filing_date, fiscal_year, adsh, tag, value, unit, data)
+        #VALUES (%s, %s, %s, %s, %s, %s, %s, %s, PARSE_JSON(%s))
+        #"""
+        #cur.execute(query, (cik, company_name, filing_date, fiscal_year, adsh, tag, value, unit, data))
+        
 
         #cur.execute(query, (cik, company_name, filing_date, fiscal_year, adsh, tag, value, unit, data))
 

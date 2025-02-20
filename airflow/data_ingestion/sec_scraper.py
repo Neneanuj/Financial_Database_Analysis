@@ -33,20 +33,13 @@ class SECDataUploader:
         base_url = "https://www.sec.gov/files/dera/data/financial-statement-data-sets/"
         return f"{base_url}{year}q{quarter}.zip"
 
-    def upload_to_s3(self, zip_content: bytes, year: int, quarter: int) -> bool:
-        #Configure multipart upload settings   NO NOTICEABLE DIFFERENCE IN SPEED
-        config = TransferConfig(
-            multipart_threshold=5 * 1024 * 1024,  # 5MB threshold
-            multipart_chunksize=5 * 1024 * 1024,  # 5MB chunks
-            max_concurrency=10,  # Number of parallel threads
-            use_threads=True)
-
+    #def unzip_and_upload(self, zip_content: bytes, year: int, quarter: int) -> bool:
         try:
             zip_buffer = io.BytesIO(zip_content)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             
             # CHANGE: 
-            folder_name = f"{year}q{quarter}"       
+            folder_name = f"{year}Q{quarter}"       #Removed Timestamp and Raw_data
             
             with zipfile.ZipFile(zip_buffer, 'r') as zip_ref:
                 for file_name in zip_ref.namelist():
@@ -69,7 +62,7 @@ class SECDataUploader:
             #print(f"Zip file error: {e}")
             return False
 
-    #def upload_to_s3(self, content: bytes, year: int, quarter: int) -> bool:
+    def upload_to_s3(self, content: bytes, year: int, quarter: int) -> bool:
         try:
             
         # Configure multipart upload settings   NO NOTICEABLE DIFFERENCE IN SPEED

@@ -319,3 +319,9 @@ logs/
 *.log
 
 .DS_Store
+
+.json
+
+*.csv
+
+profiles.yml

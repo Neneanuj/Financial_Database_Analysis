@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
-from airflow.providers.amazon.aws.sensors.s3_key import S3KeySensor
+from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
 from airflow.models import Variable
 from datetime import datetime, timedelta
 import boto3
@@ -79,6 +79,7 @@ with DAG(
         task_id='create_stage',
         snowflake_conn_id='snowflake_conn',
         sql="""
+        USE SCHEMA Fin.raw_schema;
         CREATE STAGE IF NOT EXISTS sec_raw_stage
         URL = 's3://{{ var.value.S3_BUCKET_NAME }}'
         STORAGE_INTEGRATION = s3_int

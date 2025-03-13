@@ -76,7 +76,7 @@ create_table = SnowflakeOperator(
     task_id='create_json_table',
     snowflake_conn_id='snowflake_default',
     sql="""
-    USE SCHEMA DBT_DB.DBT_SCHEMA;
+    USE SCHEMA Fin.JSON_SCHEMA;
     CREATE TABLE IF NOT EXISTS json_sec_data (
         cik STRING,
         company_name STRING,
@@ -96,7 +96,16 @@ create_table = SnowflakeOperator(
 # 5. Run DBT transformations
 run_dbt = BashOperator(
     task_id='run_dbt_models',
-    bash_command='cd dbt/data_pipeline && dbt run --profiles-dir . --target dev',
+    #bash_command='cd dbt/data_pipeline && dbt run --profiles-dir . --target dev',
+     bash_command="""
+        echo "👉 Running dbt..."
+        cd /opt/airflow/dbt/data_pipeline
+        pwd
+        ls -la
+        dbt debug --profiles-dir .
+        dbt run --profiles-dir . --target dev
+    """,
+    
     dag=dag
 )
 

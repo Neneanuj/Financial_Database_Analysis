@@ -46,7 +46,7 @@ The system provides:
 
 ## **🛠️ Diagrams**
 
-![image](./docs/data_extraction_architecture.png)
+![image](./sec_financial_data_pipeline.png)
 
 
 ---

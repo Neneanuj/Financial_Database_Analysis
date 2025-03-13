@@ -1,0 +1,526 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>🚀 Findata - Financial Statement Database Project</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="Financial-DB-Codelab"
+                  title="🚀 Findata - Financial Statement Database Project"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="tags: [&#34;Python&#34;, &#34;Snowflake&#34;, &#34;AWS&#34;, &#34;Airflow&#34;, &#34;Automation&#34;]" duration="0">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📄 Project Summary" duration="0">
+        <p>Findata Inc. aims to build a comprehensive financial statements library that helps analysts conduct fundamental analysis on publicly traded US corporations. This project extracts, standardizes, and stores data from various sources into a unified database system.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📌 Overview" duration="0">
+        <p>The Findata system provides a complete solution for financial data management:</p>
+<ul>
+<li>Snowflake for data storage and querying</li>
+<li>SEC Financial Statement Data Sets as the primary data source</li>
+<li>DBT for transforming raw financial data</li>
+<li>Airflow for orchestrating data pipelines</li>
+<li>FastAPI backend for document processing</li>
+<li>Streamlit web interface for user interaction</li>
+<li>AWS S3 for cloud storage of processed files</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🔑 Features" duration="0">
+        <ul>
+<li><strong>Automated Data Ingestion</strong>: Scrapes SEC datasets and loads them into Snowflake</li>
+<li><strong>Data Transformation</strong>: Merges, cleans, and transforms data into JSON and normalized formats</li>
+<li><strong>Pipeline Orchestration</strong>: Airflow manages all ETL tasks</li>
+<li><strong>Interactive Dashboard</strong>: Streamlit app provides an intuitive interface for data exploration</li>
+<li><strong>Cloud Storage</strong>: Processed files stored in AWS S3</li>
+<li><strong>API Access</strong>: FastAPI backend for programmatic access to financial data</li>
+<li><strong>User-friendly Interface</strong>: Streamlit web app for easy data visualization and analysis</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="✔ Technology Stack" duration="0">
+        <table>
+<tr><td colspan="1" rowspan="1"><p>Category</p>
+</td><td colspan="1" rowspan="1"><p>Tools Used</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Programming Language</p>
+</td><td colspan="1" rowspan="1"><p>Python 3.8+</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Data Platform</p>
+</td><td colspan="1" rowspan="1"><p>Snowflake</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Workflow Automation</p>
+</td><td colspan="1" rowspan="1"><p>Apache Airflow</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Data Transformation</p>
+</td><td colspan="1" rowspan="1"><p>DBT (Data Build Tool)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Backend API</p>
+</td><td colspan="1" rowspan="1"><p>FastAPI</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Frontend UI</p>
+</td><td colspan="1" rowspan="1"><p>Streamlit</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Cloud Storage</p>
+</td><td colspan="1" rowspan="1"><p>AWS S3</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Deployment</p>
+</td><td colspan="1" rowspan="1"><p>Render, Streamlit Cloud</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🚀 Installation &amp; Setup" duration="0">
+        <h2 is-upgraded>1️⃣ Prerequisites</h2>
+<p>Ensure you have:</p>
+<ul>
+<li>Python 3.8 or higher</li>
+<li>pip (Python package manager)</li>
+<li>AWS credentials (if storing files in AWS S3)</li>
+</ul>
+<h2 is-upgraded>2️⃣ Clone the Repository &amp; Install Dependencies</h2>
+<p>git clone https://github.com/Neneanuj/Financial_Database_Analysis</p>
+<p>pip install -r requirements.txt</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setup your Environment Variables" duration="0">
+        <p>AWS credentials</p>
+<pre><code>    AWS_REGION=&lt;your_aws_region&gt;
+    AWS_ACCESS_KEY_ID=&lt;your_access_key_id&gt;
+    AWS_SECRET_ACCESS_KEY=&lt;your_secret_access_key&gt;
+    BUCKET_NAME=&lt;your_bucket_name&gt;
+</code></pre>
+<p>Snowflake credentials</p>
+<pre><code>    SNOWFLAKE_ACCOUNT=&lt;your_snowflake_account&gt;
+    SNOWFLAKE_USER=&lt;your_snowflake_user&gt;
+    SNOWFLAKE_PASSWORD=&lt;your_snowflake_password&gt;
+    SNOWFLAKE_DATABASE=&lt;your_snowflake_database&gt;
+    SNOWFLAKE_SCHEMA=&lt;your_snowflake_schema&gt;
+    SNOWFLAKE_WAREHOUSE=&lt;your_snowflake_warehouse&gt;
+    SNOWFLAKE_TABLE=&lt;your_snowflake_table&gt;
+</code></pre>
+<p>Create and activate virtual environment</p>
+<pre><code>    python -m venv venv
+    source venv/bin/activate  (Mac)
+</code></pre>
+<h2 is-upgraded>Step 2: Scrape SEC Data Links</h2>
+<p>Let&#39;s create a script to scrape the SEC website for financial statement data links:</p>
+<pre><code>    import boto3
+    import requests
+    import time
+    import io
+    import os
+    import zipfile
+    from botocore.exceptions import ClientError
+    from datetime import datetime
+    from dotenv import load_dotenv
+    from boto3.s3.transfer import TransferConfig
+
+
+    load_dotenv()
+    class SECDataUploader:
+        def __init__(self, bucket_name):
+            self.s3_client = boto3.client(&#39;s3&#39;)
+            # CHANGE:
+            self.bucket_name = os.getenv(&#39;S3_BUCKET_NAME&#39;)
+            self.headers = {
+                &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&#39;,
+                &#39;Accept&#39;: &#39;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#39;,
+                &#39;Accept-Encoding&#39;: &#39;gzip, deflate&#39;,
+                &#39;Accept-Language&#39;: &#39;en-US,en;q=0.5&#39;,
+                &#39;Connection&#39;: &#39;keep-alive&#39;
+            }
+
+        def generate_sec_url(self, year: int, quarter: int):
+            if not (2009 &lt;= year &lt;= 2024):
+                raise ValueError(&#34;Year must be between 2009 and 2024&#34;)
+            if not (1 &lt;= quarter &lt;= 4):
+                raise ValueError(&#34;Quarter must be between 1 and 4&#34;)
+            
+            base_url = &#34;https://www.sec.gov/files/dera/data/financial-statement-data-sets/&#34;
+            return f&#34;{base_url}{year}q{quarter}.zip&#34;
+
+
+        def upload_to_s3(self, content: bytes, year: int, quarter: int) -&gt; bool:
+            try:
+                
+            # Configure multipart upload settings   NO NOTICEABLE DIFFERENCE IN SPEED
+            # config = TransferConfig(
+                #multipart_threshold=5 * 1024 * 1024,  # 5MB threshold
+                #multipart_chunksize=5 * 1024 * 1024,  # 5MB chunks
+                #max_concurrency=10,  # Number of parallel threads
+                #use_threads=True
+            #)
+                timestamp = datetime.now().strftime(&#34;%Y%m%d_%H%M%S&#34;)
+                filename = f&#34;{year}q{quarter}.zip&#34;
+                
+                # Define S3 key (path)
+                s3_key = f&#34;{filename}&#34;
+                
+                # Upload to S3
+                self.s3_client.put_object(
+                    Bucket=self.bucket_name,
+                    Key=s3_key,
+                    Body=content ,
+                    ContentType = &#39;application/zip&#39;
+                )
+                print(f&#34;Uploaded {filename} to s3://{self.bucket_name}/{s3_key}&#34;)
+                return True
+                
+            except ClientError as e:
+                print(f&#34;S3 upload error: {e}&#34;)
+                return False
+            
+
+        def fetch_and_upload(self, year: int, quarter: int) -&gt; bool:
+            try:
+                url = self.generate_sec_url(year, quarter)
+                print(f&#34;\nFetching data from: {url}&#34;)
+                
+                time.sleep(0.1)  # Rate limiting
+                response = requests.get(url, headers=self.headers)
+                
+                if response.status_code == 200 and response.content:
+                    print(&#34;\nUnzipping and uploading files...&#34;)
+                    return self.upload_to_s3(response.content, year, quarter)
+                else:
+                    print(f&#34;Failed to fetch data. Status code: {response.status_code}&#34;)
+                    return False
+                    
+            except Exception as e:
+                print(f&#34;Error: {e}&#34;)
+                return False
+
+
+    def main():
+        # CHANGE: Replace this with your actual S3 bucket name
+        BUCKET_NAME = os.getenv(&#39;S3_BUCKET_NAME&#39;) 
+        
+        # CHANGE: You can also set the bucket name using environment variables
+        # import os
+        # BUCKET_NAME = os.getenv(&#39;S3_BUCKET_NAME&#39;)
+        
+        uploader = SECDataUploader(BUCKET_NAME)
+        
+        try:
+            year = int(input(&#34;Enter year (2009-2024): &#34;))
+            quarter = int(input(&#34;Enter quarter (1-4): &#34;))
+            
+            if uploader.fetch_and_upload(year, quarter):
+                print(&#34;\nAll files successfully uploaded to S3&#34;)
+            else:
+                print(&#34;\nFailed to complete the upload process&#34;)
+                
+        except ValueError as e:
+            print(f&#34;Input error: {e}&#34;)
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="if 
+name == &#34;
+main&#34;:
+main()" duration="0">
+        <h2 is-upgraded>Step 3: Load Raw Data to Snowflake</h2>
+<pre><code>    def load_file_to_snowflake(self, file_path: str, table_name: str):
+            try:
+                    # Get file from S3
+                    response = self.s3_client.get_object(
+                        Bucket=self.bucket_name, 
+                        Key=file_path
+                    )
+                    
+                    # Read file content
+                    file_content = response[&#39;Body&#39;].read().decode(&#39;utf-8&#39;)
+                    csv_file = io.StringIO(file_content)
+                    csv_reader = csv.reader(csv_file, delimiter=&#39;\t&#39;)
+                    
+                    # Get headers
+                    headers = next(csv_reader)
+                    
+                    # Prepare cursor and SQL
+                    cursor = self.snowflake_conn.cursor()
+                    
+                    # Create INSERT statement with NULL handling
+                    columns = &#39;,&#39;.join(headers)
+                    placeholders = &#39;,&#39;.join([&#39;NULLIF(%s,\&#39;\&#39;)&#39;] * len(headers))
+                    insert_sql = f&#34;INSERT INTO {table_name} ({columns}) VALUES ({placeholders})&#34;
+                    
+                    # Load data in batches
+                    batch_size = 10000
+                    batch = []
+                    rows_loaded = 0
+                    
+                    for row in csv_reader:
+                        batch.append(row)
+                        if len(batch) &gt;= batch_size:
+                            cursor.executemany(insert_sql, batch)
+                            rows_loaded += len(batch)
+                            batch = []
+                    
+                    # Insert remaining rows
+                    if batch:
+                        cursor.executemany(insert_sql, batch)
+                        rows_loaded += len(batch)
+                    
+                    cursor.close()
+                    return True, rows_loaded
+                        
+            except Exception as e:
+                    print(f&#34;Error loading {file_path}: {str(e)}&#34;)
+                    return False, 0
+</code></pre>
+<h2 is-upgraded>Step 4: Setting Up DBT for Financial Statement Data</h2>
+<p>DBT (Data Build Tool) is essential for transforming and validating our SEC financial statement data. Let&#39;s implement a comprehensive approach for both normalized and denormalized tables.</p>
+<p>Step 1: Initialize DBT Project Structure First, we need to set up our DBT project with the appropriate directory structure.</p>
+<p>Create a new DBT project</p>
+<pre><code>    dbt init sec_financial_data
+    cd sec_financial_data
+</code></pre>
+<p>Create necessary directories</p>
+<pre><code>    mkdir -p models/staging
+    mkdir -p models/intermediate
+    mkdir -p models/marts/core
+    mkdir -p models/marts/finance
+    mkdir -p tests/generic
+    mkdir -p tests/singular
+    Step 2: Configure DBT Profile
+    Configure your DBT profile to connect to Snowflake.
+</code></pre>
+<p>text</p>
+<p>~/.dbt/profiles.yml</p>
+<pre><code>    sec_financial_data:
+    target: dev
+    outputs:
+        dev:
+        type: snowflake
+        account: [account_id]
+        user: [username]
+        password: [password]
+        role: [role]
+        database: SEC_FINANCIAL_DATA
+        warehouse: [warehouse]
+        schema: dbt_dev
+        threads: 4
+        prod:
+        type: snowflake
+        account: [account_id]
+        user: [username]
+        password: [password]
+        role: [role]
+        database: SEC_FINANCIAL_DATA
+        warehouse: [warehouse]
+        schema: dbt_prod
+        threads: 8
+</code></pre>
+<p>Step 3: Define Source Tables in YAML</p>
+<p>Create a source definition file to map the raw tables in Snowflake.</p>
+<p>Step 4: Create Staging Models</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create staging models to clean and validate the raw data." duration="0">
+        <h2 is-upgraded>Step 5: Develop DBT Transformation Strategy Document</h2>
+<p>Create a comprehensive document outlining the DBT transformation strategy.</p>
+<p>text</p>
+<p>DBT Transformation Strategy Document</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Model Organization" duration="0">
+        <p>Our DBT project follows a layered architecture:</p>
+<ol type="1">
+<li><strong>Sources</strong>: Raw data from Snowflake tables</li>
+<li><strong>Staging</strong>: Cleaned and validated raw data</li>
+<li><strong>Intermediate</strong>: Normalized tables with business logic</li>
+<li><strong>Marts</strong>: Denormalized fact tables for analytics</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Testing Strategy" duration="0">
+        <p>We implement four levels of testing:</p>
+<ol type="1">
+<li><strong>Schema Validation</strong>: Ensuring data types and structures match expectations</li>
+<li><strong>Data Quality</strong>: Checking for nulls, uniqueness, and accepted values</li>
+<li><strong>Referential Integrity</strong>: Verifying relationships between tables</li>
+<li><strong>Business Logic</strong>: Custom tests for financial calculations and balances</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Implementation Approach" duration="0">
+        <ol type="1">
+<li><strong>Idempotent Transformations</strong>: All models can be run multiple times with the same result</li>
+<li><strong>Incremental Models</strong>: For large tables to optimize processing</li>
+<li><strong>Documentation</strong>: All models and columns are documented</li>
+<li><strong>Modularity</strong>: Breaking complex transformations into smaller, reusable pieces</li>
+</ol>
+<h2 is-upgraded>Step 6: Operational Pipeline with Airflow</h2>
+<p>Setting Up Airflow for Data Processing Now, let&#39;s implement Airflow pipelines for data validation and staging using S3 for intermediate storage</p>
+<pre><code>    from airflow import DAG
+    from airflow.operators.python import PythonOperator
+    from airflow.operators.bash import BashOperator
+    from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
+    #from airflow.providers.snowflake.operators.snowflake_operator import SnowflakeOperator
+    from datetime import datetime, timedelta
+    import os
+    import json
+    #from storage.snowflake_loader import load_json_to_snowflake
+
+    #def process_json():
+    #    load_json_to_snowflake(&#34;../../2021q4/sec_financial_data_clean.json&#34;, &#34;json_sec_data&#34;)
+
+    default_args = {
+        &#39;owner&#39;: &#39;airflow&#39;,
+        &#39;depends_on_past&#39;: False,
+        &#39;start_date&#39;: datetime(2025, 2, 12),
+        &#39;retries&#39;: 1,
+        &#39;retry_delay&#39;: timedelta(minutes=5)
+    }
+
+    dag = DAG(
+        &#39;json_pipeline&#39;,
+        default_args=default_args,
+        description=&#39;JSON Financial Data Pipeline DAG&#39;,
+        schedule_interval=&#39;@daily&#39;,
+        catchup=False
+    )
+
+    # 1. Basic Python Task
+    def print_context(**context):
+        &#34;&#34;&#34;Shows how to use context variables in Airflow&#34;&#34;&#34;
+        print(f&#34;Execution date is {context[&#39;ds&#39;]}&#34;)
+        print(f&#34;Task instance: {context[&#39;task_instance&#39;]}&#34;)
+        return &#34;Hello from first Json task!&#34;
+
+    task1 = PythonOperator(
+        task_id=&#39;print_context&#39;,
+        python_callable=print_context, #process_json
+        dag=dag
+    )
+
+    # 1. Unzip SEC data
+    def unzip_data(**context):
+        os.system(&#34;unzip -o ../../2021q4/2021q4.zip -d ../../2021q4/extracted/&#34;)
+        print(&#34;✅ Data unzipped successfully&#34;)
+
+    unzip_task = PythonOperator(
+        task_id=&#39;unzip_sec_data&#39;,
+        python_callable=unzip_data,
+        dag=dag
+    )
+    # 2. Transform SEC CSV to JSON
+    def transform_to_json(**context):
+        os.system(&#34;python data_ingestion/sec_csv_reader.py&#34;)
+        print(&#34;✅ JSON transformation complete&#34;)
+
+    transform_task = PythonOperator(
+        task_id=&#39;transform_to_json&#39;,
+        python_callable=transform_to_json,
+        dag=dag
+    )
+
+    # 3. Load JSON into Snowflake
+    def load_to_snowflake(**context):
+        os.system(&#34;python storage/snowflake_loader_json.py&#34;)
+        print(&#34;✅ JSON loaded into Snowflake&#34;)
+
+    load_task = PythonOperator(
+        task_id=&#39;load_to_snowflake&#39;,
+        python_callable=load_to_snowflake,
+        dag=dag
+    )
+    # 4. create table
+    create_table = SnowflakeOperator(
+        task_id=&#39;create_json_table&#39;,
+        snowflake_conn_id=&#39;snowflake_default&#39;,
+        sql=&#34;&#34;&#34;
+        USE SCHEMA DBT_DB.DBT_SCHEMA;
+        CREATE TABLE IF NOT EXISTS json_sec_data (
+            cik STRING,
+            company_name STRING,
+            filing_date DATE,
+            fiscal_year INT,
+            adsh STRING,
+            tag STRING,
+            value FLOAT,
+            unit STRING,
+            data VARIANT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        &#34;&#34;&#34;,
+        dag=dag
+    )
+
+    # 5. Run DBT transformations
+    run_dbt = BashOperator(
+        task_id=&#39;run_dbt_models&#39;,
+        bash_command=&#39;cd dbt/data_pipeline &amp;&amp; dbt run --profiles-dir . --target dev&#39;,
+        dag=dag
+    )
+
+    # 6. Run DBT tests
+    test_dbt = BashOperator(
+        task_id=&#39;test_dbt_models&#39;,
+        bash_command=&#39;cd dbt/data_pipeline &amp;&amp; dbt test --profiles-dir . --target dev&#39;,
+        dag=dag
+    )
+
+
+    # Task dependencies
+    unzip_task &gt;&gt; transform_task &gt;&gt; create_table &gt;&gt; load_task &gt;&gt; run_dbt &gt;&gt; test_dbt
+</code></pre>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

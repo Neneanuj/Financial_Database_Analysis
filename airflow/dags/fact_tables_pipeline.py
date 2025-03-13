@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 import os
 import sys
 import subprocess
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from data_ingestion.sec_scraper_fact import SECDataUploader
 
 
 
@@ -18,6 +20,7 @@ default_args = {
 }
 
 dag = DAG(
+    
     'fact_tables_pipeline',
     default_args=default_args,
     description='Extract SEC fact tables, upload CSVs to S3, create stage and load data into Snowflake in DBT_DB.DBT_SCHEMA',
@@ -42,7 +45,11 @@ def run_ingestion_extraction(**kwargs):
     
     print(f"Script path: {script_path}")
     
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.path.abspath(os.path.join(current_dir, ".."))
+
     cmd = f"python '{script_path}' --year {year} --quarter {quarter}"
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, env=env)
     print(f"Running command: {cmd}")
     
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
@@ -64,6 +71,7 @@ create_stage = SQLExecuteQueryOperator(
     task_id='create_s3_stage',
     conn_id='snowflake_default',
     sql="""
+    USE SCHEMA Fin.fact_tables;
     CREATE STAGE IF NOT EXISTS my_s3_stage
     URL='s3://bigdata-project2-storage/'
     CREDENTIALS=(AWS_KEY_ID='{{ conn.aws_default.login }}'
